@@ -10,6 +10,9 @@ on:
       - '.github/workflows/wayne.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 env:
   CI_BUILD: true
 
@@ -50,3 +53,18 @@ jobs:
             /tmp/UniXNU/Build/Out/AARCH64-RELEASE/*.efi
           if-no-files-found: warn
           compression-level: 9
+
+      # The device repository packs the payload into this firmware volume. A
+      # public release asset keeps that step free of cross-repository tokens.
+      - name: Publish the firmware volume
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p dist
+          cp Build/waynePkg/RELEASE_CLANGPDB/FV/SILICIUM_UEFI.fd dist/
+          cp Mu-wayne.img dist/
+          ( cd dist && sha256sum * > SHA256SUMS )
+          gh release view wayne-latest >/dev/null 2>&1 || \
+            gh release create wayne-latest --title "wayne UEFI (latest)" --notes "Firmware volume and boot image built from the current main."
+          gh release upload wayne-latest dist/* --clobber
+
