@@ -71,6 +71,11 @@
   #
   ConfigurationMapLib|waynePkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf
 
+  #
+  # UniXNU libraries
+  #
+  UniXNULib|UniXNUPkg/Library/UniXNULib/UniXNULib.inf
+
 [Components]
   #
   # ACPI Tables
