@@ -19,11 +19,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build UEFI for wayne
+      - name: Install toolchain
+        run: bash ./setup_env.sh -p apt
+
+      - name: Build UniXNU package
         run: |
-          bash ./setup_env.sh -p apt
-          cp Resources/Configs/wayne.toml /tmp/wayne.toml.backup
-          ./build_uefi.py -d wayne -r RELEASE -c
+          git submodule update --init --depth 1 Mu_Basecore
+          ( cd Mu_Basecore && git submodule update --init --depth 1 \
+              MdePkg/Library/BaseFdtLib/libfdt \
+              MdePkg/Library/MipiSysTLib/mipisyst \
+              BaseTools/Source/C/BrotliCompress/brotli )
+          git clone --depth 1 https://github.com/UniXNU/UniXNU.git /tmp/UniXNU
+          ( cd /tmp/UniXNU && echo "UniXNU revision: $(git rev-parse HEAD)" )
+          UNIXNU_EDK2="$PWD/Mu_Basecore" bash /tmp/UniXNU/package/build.sh -b RELEASE -t CLANGPDB
+          echo "FEATURE_CONFIG_PATH=/tmp/UniXNU/package" >> "$GITHUB_ENV"
+
+      - name: Build UEFI for wayne
+        run: ./build_uefi.py -d wayne -r RELEASE -c
 
       - name: Upload UEFI image
         uses: actions/upload-artifact@v4
@@ -32,6 +44,6 @@ jobs:
           path: |
             Mu-wayne.img
             Build/waynePkg/RELEASE_CLANGPDB/FV/SILICIUM_UEFI.fd
-            Build/waynePkg/RELEASE_CLANGPDB/FV/SILICIUM_UEFI.fd.gz
+            /tmp/UniXNU/Build/Out/AARCH64-RELEASE/*.efi
           if-no-files-found: warn
           compression-level: 9

@@ -76,3 +76,11 @@
   # ACPI Tables
   #
   lavender/AcpiTables.inf
+
+  #
+  # UniXNU: the boot manager application and the firmware volume registrar.
+  # The directory holding UniXNUPkg reaches PACKAGES_PATH through
+  # FEATURE_CONFIG_PATH, which the build sets to the UniXNU package checkout.
+  #
+  UniXNUPkg/Driver/UniXNUDxe/UniXNUDxe.inf
+  UniXNUPkg/Application/UniXNU/UniXNU.inf
