@@ -32,7 +32,10 @@ jobs:
           git clone --depth 1 https://github.com/UniXNU/UniXNU.git /tmp/UniXNU
           ( cd /tmp/UniXNU && echo "UniXNU revision: $(git rev-parse HEAD)" )
           UNIXNU_EDK2="$PWD/Mu_Basecore" bash /tmp/UniXNU/package/build.sh -b RELEASE -t CLANGPDB
-          echo "FEATURE_CONFIG_PATH=/tmp/UniXNU/package" >> "$GITHUB_ENV"
+          # The platform DSC refers to UniXNUPkg/..., so the package has to be
+          # visible under one of the PACKAGES_PATH entries this platform lists.
+          cp -r /tmp/UniXNU/package/UniXNUPkg Platforms/Xiaomi/UniXNUPkg
+          ls Platforms/Xiaomi/UniXNUPkg
 
       - name: Build UEFI for wayne
         run: ./build_uefi.py -d wayne -r RELEASE -c
