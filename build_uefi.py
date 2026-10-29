@@ -341,6 +341,7 @@ def create_android_boot_img (ctx: BuildContext, image_kernel_config: dict, image
         "header_version": "--header_version",
         "kernel_offset":  "--kernel_offset",
         "os_patch_level": "--os_patch_level",
+        "pagesize":       "--pagesize",
         "os_version":     "--os_version",
         "ramdisk_offset": "--ramdisk_offset",
         "second_offset":  "--second_offset",

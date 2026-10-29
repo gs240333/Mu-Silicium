@@ -1,0 +1,38 @@
+#
+# Xiaomi MI 6X (wayne) - SDM660, eMMC, 4 GiB
+#
+# Boot Shim Configs
+#
+[boot_shim]
+requires_kernel_header = true
+
+#
+# UEFI FD Configs
+# Same SDM660 ABL reservation as the other sdm660 boards:
+# 0x9FC00000 + 0x300000 (ends at 0xA0000000).
+#
+[uefi_fd]
+base = 0x9FC00000
+size = 0x300000
+
+#
+# Android Boot Image Kernel Configs
+# wayne's ABL only jumps gzip-compressed kernel payloads, and it expects the
+# board DTB appended after the compressed image (stock boot.img layout).
+#
+[boot_image_kernel]
+kernel_compression = "gzip"
+append_dtb         = true
+
+#
+# Android Boot Image Configs
+# wayne stock boot.img: header v0, page size 4096,
+# kernel @0x8000, ramdisk @0x1000000, tags @0x100.
+#
+[boot_image]
+header_version  = 0
+base            = 0x00000000
+kernel_offset   = 0x00008000
+ramdisk_offset  = 0x01000000
+tags_offset     = 0x00000100
+pagesize        = 4096

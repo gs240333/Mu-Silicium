@@ -1,0 +1,37 @@
+name: Build UEFI for wayne
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - 'Platforms/Xiaomi/waynePkg/**'
+      - 'Resources/Configs/wayne.toml'
+      - 'Resources/DTBs/wayne.dtb'
+      - '.github/workflows/wayne.yml'
+  workflow_dispatch:
+
+env:
+  CI_BUILD: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build UEFI for wayne
+        run: |
+          bash ./setup_env.sh -p apt
+          cp Resources/Configs/wayne.toml /tmp/wayne.toml.backup
+          ./build_uefi.py -d wayne -r RELEASE -c
+
+      - name: Upload UEFI image
+        uses: actions/upload-artifact@v4
+        with:
+          name: wayne-uefi
+          path: |
+            Mu-wayne.img
+            Build/waynePkg/RELEASE_CLANGPDB/FV/SILICIUM_UEFI.fd
+            Build/waynePkg/RELEASE_CLANGPDB/FV/SILICIUM_UEFI.fd.gz
+          if-no-files-found: warn
+          compression-level: 9
