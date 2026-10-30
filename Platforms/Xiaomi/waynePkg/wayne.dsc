@@ -89,3 +89,8 @@
   #
   UniXNUPkg/Driver/UniXNUDxe/UniXNUDxe.inf
   UniXNUPkg/Application/UniXNU/UniXNU.inf
+
+  #
+  # DarwinBoot: the UEFI XNU loader that the xnu payload entry hands off to.
+  #
+  DarwinBootPkg/Driver/DarwinBoot.inf

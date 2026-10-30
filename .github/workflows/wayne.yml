@@ -7,6 +7,7 @@ on:
       - 'Platforms/Xiaomi/waynePkg/**'
       - 'Resources/Configs/wayne.toml'
       - 'Resources/DTBs/wayne.dtb'
+      - 'BootShim/**'
       - '.github/workflows/wayne.yml'
   workflow_dispatch:
 
@@ -39,6 +40,11 @@ jobs:
           # visible under one of the PACKAGES_PATH entries this platform lists.
           cp -r /tmp/UniXNU/package/UniXNUPkg Platforms/Xiaomi/UniXNUPkg
           ls Platforms/Xiaomi/UniXNUPkg
+          # DarwinBoot is the firmware side of the xnu payload entry.
+          git clone -q https://github.com/UniXNU/DarwinBoot.git /tmp/DarwinBoot
+          ( cd /tmp/DarwinBoot && git checkout -q 3325e352d7df68a9f9ad74832ed94a6acbbd7390 && echo "DarwinBoot revision: $(git rev-parse HEAD)" )
+          cp -r /tmp/DarwinBoot/DarwinBootPkg Platforms/Xiaomi/DarwinBootPkg
+          ls Platforms/Xiaomi/DarwinBootPkg Platforms/Xiaomi/DarwinBootPkg/Driver
 
       - name: Build UEFI for wayne
         run: ./build_uefi.py -d wayne -r RELEASE -c
