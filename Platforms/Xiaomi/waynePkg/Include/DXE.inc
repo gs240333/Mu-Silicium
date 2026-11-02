@@ -78,5 +78,12 @@
   INF Binaries/lavender/QcomPkg/Drivers/UsbConfigDxe/UsbConfigDxe.inf
   INF Binaries/lavender/QcomPkg/Drivers/HashDxe/HashDxe.inf
   INF Binaries/lavender/QcomPkg/Drivers/RNGDxe/RngDxe.inf
+  # UniXNU boot chain (packed into FVMAIN; without these the menu lists an entry
+  # that no loader answers)
+  INF UniXNUPkg/Application/UniXNU/UniXNU.inf
+  INF UniXNUPkg/Driver/UniXNUDxe/UniXNUDxe.inf
+  INF UniXNUPkg/Driver/UniXNURamDiskDxe/UniXNURamDiskDxe.inf
+  INF DarwinBootPkg/Driver/DarwinBoot.inf
+
 
   INF MdeModulePkg/Universal/BdsDxe/BdsDxe.inf

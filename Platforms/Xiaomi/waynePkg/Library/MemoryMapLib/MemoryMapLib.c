@@ -1,5 +1,19 @@
 #include <Library/MemoryMapLib.h>
 
+//
+// wayne: the table below is lavender's SDM660 map, copied as the starting point
+// because both boards are the same SoC. Everything that describes THIS BOARD
+// rather than the SoC must be measured from the stock wayne boot image before it
+// can be trusted:
+//
+//   Kernel (size), DXE Heap, Display Reserved (splash), FV Region, ABOOT FV,
+//   UEFI FD, SEC Heap, MMU PageTables, UEFI Stack, DBI Dump, Log Buffer, Info Blk
+//
+// The SoC-side entries (GCC, TLMM, QTIMER, GIC, PERIPH_SS, MMSS, APCS_CC, ...)
+// are shared and can stay. A wrong DDR region does not fail the build: it hangs
+// or corrupts memory at runtime.
+//
+
 STATIC
 EFI_MEMORY_REGION_DESCRIPTOR
 gMemoryDescriptor[] = {
